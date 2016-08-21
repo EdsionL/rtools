@@ -1,0 +1,81 @@
+#!/usr/bin/env python
+import os, sys
+
+from rcommon import *
+from rcmds import *
+
+prog = os.path.basename(sys.argv[0])
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+def getCommand():
+	keys = []
+	for c in cmds:
+		print len(keys),':',c, '>', cmds[c]
+		keys.append(c)
+
+	print len(keys) + 1,':', '<Exit>'
+	i = len(keys) + 1
+
+	try:
+		str = raw_input(':')
+		i = int(str)
+		if i == len(keys) + 1:
+			sys.exit(0)	
+		return cmds[keys[i]]
+	except Exception, e:
+		pass
+	print("Unknow command!")
+	sys.exit(0)
+	
+def check_command(cmd, host):
+	alert = False
+	alert_keyword = ('reboot', 'rm -rf')
+
+	for kw in alert_keyword:
+		if cmd.find(kw) != -1:
+			alert = True
+			break
+
+	if alert:
+		print bcolors.OKGREEN +'Are you sure to execute the following command on %s?' % host + bcolors.ENDC
+		print '>', bcolors.FAIL + cmd + bcolors.ENDC
+		str = raw_input('y/n:')
+		if str != 'y':
+			sys.exit(0)
+	return cmd
+
+def main():
+	if len(sys.argv) != 2:
+		print("Example: %s cfg\n" % prog)
+		return
+
+	try:
+		cfg = getConfig(sys.argv[1]);
+	except Exception, e:
+		print('Invalid config: %s' % sys.argv[1])
+		return
+
+	port = getStringField(cfg, 'port_ssh', '22')
+	user = getStringField(cfg, 'user', 'root')
+
+	argv = ['ssh', '-p', port, '%s@%s' % (user, cfg['host'])]
+
+	if prog == 'rcmd':
+		cmd = getCommand()
+		check_command(cmd, cfg['host'])
+		argv.append(cmd)
+		print '========================'
+
+	os.execvp('ssh', argv);
+
+if prog == 'rssh' or prog == 'rcmd':
+	main()
