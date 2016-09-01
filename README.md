@@ -1,4 +1,4 @@
-# rtools
+# rtools 1.1
 An command set for remote host management
 
 ## Installation
@@ -76,3 +76,9 @@ If you input 'y' and ENTER, the host "blog" will reboot.
 
 # More features
 You can tell me, or one day I have the new idea.
+
+###Changelog
+
+1.1
+	Parse arguments with argpase
+

@@ -1,5 +1,8 @@
 from rconfig import *
 
+def getVersion():
+	return "1.1";
+
 def getConfig(cfgname):
 	cfg = globals()[cfgname]
 	#TODO find host

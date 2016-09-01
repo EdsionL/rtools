@@ -3,6 +3,7 @@ import os, sys
 
 from rcommon import *
 from rcmds import *
+from argparse import *
 
 prog = os.path.basename(sys.argv[0])
 
@@ -54,14 +55,14 @@ def check_command(cmd, host):
 	return cmd
 
 def main():
-	if len(sys.argv) != 2:
-		print("Example: %s cfg\n" % prog)
-		return
+	parser = ArgumentParser(description='Login to host via ssh.', epilog='rtools '+getVersion())
+	parser.add_argument('cfg', metavar='cfg', type=str, help='the name of configuration.')
+	args = parser.parse_args();
 
 	try:
-		cfg = getConfig(sys.argv[1]);
+		cfg = getConfig(args.cfg);
 	except Exception, e:
-		print('Invalid config: %s' % sys.argv[1])
+		print('Invalid config: %s' % args.cfg)
 		return
 
 	port = getStringField(cfg, 'port_ssh', '22')
