@@ -1,4 +1,4 @@
-# rtools 1.1
+# rtools
 An command set for remote host management
 
 ## Installation
@@ -25,7 +25,35 @@ route = {
 	'user':'root',
 	'passwd':'',
 }
+
+pi = {
+	'host':'-cmd-get_server_ip.sh',
+	'port_ssh':'22',
+	'user':'pi',
+	'passwd':'',
+}
+
+
+def getip():
+	return '127.0.0.1'
+
+test = {
+	'host':'-func-getip',
+	'port_ssh':'22',
+	'user':'pi',
+	'passwd':'',
+}
+
 ```
+
+If you ip(domain) is often be changed,you can set up the 'host' like that.
+> 'host':'-cmd-get_server_ip.sh'
+> 
+> or
+> 
+> 'host':'-func-getip',
+
+The program will execute "get_server_ip.sh" or call 'getip' to get ip
 
 ## Usage
 Goto the path of rtools. If you add the path of rtools to PATH, you can use rtools in any work path.
@@ -37,7 +65,7 @@ Goto the path of rtools. If you add the path of rtools to PATH, you can use rtoo
 Connect to host via ssh.
 
 ```
-~> ./rssh blog # ssh root@127.0.0.1
+~> ./rssh blog  # ssh root@127.0.0.1
 ~> ./rssh route # ssh root@192.168.1.1
 
 ```
@@ -46,8 +74,8 @@ Connect to host via ssh.
 You can copy files betwen two host
 
 ```
-~> rscp blog "~/test.jpg" # Get test.jpg from remote host
-~> rscp blog "~/test.jpg" "~/" # Put test.jpg to remote host
+~> rscp -g blog "~/test.jpg" ~/    # Get test.jpg from remote host
+~> rscp -p blog "~/test.jpg" "~/"  # Put test.jpg to remote host
 ```
 
 ### rcmd
@@ -74,11 +102,16 @@ y/n:
 ```
 If you input 'y' and ENTER, the host "blog" will reboot.
 
-# More features
-You can tell me, or one day I have the new idea.
 
-###Changelog
+# Changelog
 
-1.1
-	Parse arguments with argpase
+1.1.1
 
+* More options in 'rscp'. 
+* Discover dynamic ip
+
+1.1.0
+
+* Parse arguments with argpase
+
+More idea in NOTE.md

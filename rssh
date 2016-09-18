@@ -32,6 +32,9 @@ def getCommand():
 		if i == len(keys) + 1:
 			sys.exit(0)	
 		return cmds[keys[i]]
+	except KeyboardInterrupt, e:
+		print('\nexit')
+		sys.exit(0)
 	except Exception, e:
 		pass
 	print("Unknow command!")
